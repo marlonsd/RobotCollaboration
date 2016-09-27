@@ -7,17 +7,44 @@ int main(int argc, char* argv[]){
 	}
 
 	scenario environment;
+	std::deque<pos> robots;
+	std::deque<pos> goals;
+	std::deque<pos> obstacles;
 
 	string filename = argv[1];
 
 	environment = create_environment(filename);
 
+	cout << endl << "Environment:" << endl;
 	for (auto line : environment){
 		for (auto element : line){
-			cout << element << " ";
+			cout << element << "\t";
 		}
 		cout << endl;
 	}
+
+	cout << endl;
+
+	locate_objects(environment,robots,goals,obstacles);
+
+	cout << "Objects:" << endl;
+	cout << "\tRobots: ";
+	for (auto e : robots){
+		cout << "(" << e.x << "," << e.y << ") ";
+	}
+	cout << endl;
+
+	cout << "\tGoals: ";
+	for (auto e : goals){
+		cout << "(" << e.x << "," << e.y << ") ";
+	}
+	cout << endl;
+
+	cout << "\tObstacles: ";
+	for (auto e : obstacles){
+		cout << "(" << e.x << "," << e.y << ") ";
+	}
+	cout << endl;
 
 	return 0;
 }

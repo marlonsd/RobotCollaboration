@@ -22,5 +22,6 @@ struct pos{
 };
 
 scenario create_environment(string filename);
+void locate_objects(scenario environment, std::deque<pos>& robots, std::deque<pos>& goals, std::deque<pos>& obstacles);
 
 #endif
