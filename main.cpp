@@ -6,14 +6,14 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
-	scenario environment;
+	scenario<bool> environment;
 	std::deque<pos> robots;
 	std::deque<pos> goals;
 	std::deque<pos> obstacles;
 
 	string filename = argv[1];
 
-	environment = create_environment(filename);
+	environment = create_environment(filename,robots,goals,obstacles);
 
 	cout << endl << "Environment:" << endl;
 	for (auto line : environment){
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
 
 	cout << endl;
 
-	locate_objects(environment,robots,goals,obstacles);
+	// locate_objects(environment,robots,goals,obstacles);
 
 	cout << "Objects:" << endl;
 	cout << "\tRobots: ";
