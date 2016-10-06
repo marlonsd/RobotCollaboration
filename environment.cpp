@@ -75,94 +75,49 @@ scenario<bool> create_environment(string filename, std::deque<pos>& robots, std:
 	return matrix;
 }
 
-// Read the matrix and localize objects
-// void locate_objects(scenario<string> environment, std::deque<pos>& robots, std::deque<pos>& goals, std::deque<pos>& obstacles){
-// 	pos position, aux;
-
-// 	position.x = 0;
-// 	position.y = 0;
-
-// 	for (auto line : environment){
-// 		aux.x = position.x;
-// 		for (auto element : line){
-// 			aux.y = position.y;
-// 			switch(element[0]){
-// 				case 'g':
-// 					goals.push_back(aux);
-// 					break;
-// 				case 'o':
-// 					obstacles.push_back(aux);
-// 					break;
-// 				case 'x':
-// 					robots.push_back(aux);
-// 					break;
-// 			}
-// 			position.y++;
-// 		}
-// 		position.x++;
-// 		position.y = 0;
-// 	}
-// }
-
-// void create_graph(scenario<string> environment, std::deque<pos>& robots, std::deque<pos>& goals, std::deque<pos>& obstacles){
-// 	scenario<bool> matrix;	// Bool because it is just necessary to know whether its possible to access or not.
-// 	pos environment_size;
-// 	int environment_total;
-
-// 	int loop = (-1,0,1);
-
-// 	int i,j;
-
-// 	environment_size.x = environment.size();
-// 	if (environment_size.x > 0){
-// 		int size_aux = environment.front().size();
-// 		if (size_aux > 0){
-// 			environment_size.y = environment.front().size();
-// 		} else {
-// 			return;
-// 		}
-// 	} else {
-// 		return;
-// 	}
-
-// 	environment_total = environment_size.x * environment_size.y;
-
-// 	// Initializing adjacency matrix
-// 	for (i = 0; i < environment_total; i++){
-// 		deque<bool> matrix_line;
-// 		for (j = 0; j < environment_total; j++){
-// 			matrix_line.push_back(0);
-// 		}
-// 		matrix.push_back(matrix_line);
-// 	}
-
-// 	i = 0;
-// 	for (auto line : environment){
-// 		deque<bool> matrix_line;
-// 		j = 0;
-// 		for (auto e : line){
-// 			int place = (i*environment_size.y)+j;
-// 			int aux_place;
-// 			if (e == "+" || e[0] == "g"){	// Free spot
-// 				for (int x : loop){
-// 					for (int y : loop){
-// 						aux_place = ((i+x)*environment_size.y)+(j+y);
-// 					}
-// 				}
-// 			}
-
-// 			j++;
-// 		}
-// 		matrix.push_back(matrix_line);
-// 		i++;
-// 	}
-
-// }
-
 bool valid_place(int x, int i, int y, int j, pos limit){
 	bool test;
+	int new_x, new_y;
+
+	new_x = x+i;
+	new_y = y+j;
+
+	test = (new_x < limit.x) && (new_x >= 0);
+	test = test && ((new_y < limit.y) && (new_y >= 0));
 
 	// x+i <= limit.x && >= 0
 	// y+j <= limit.y && >= 0
 
+	return test;
+
+}
+
+bool valid_place(int new_x, int new_y, pos limit){
+	bool test;
+
+	test = (new_x < limit.x) && (new_x >= 0);
+	test = test && ((new_y < limit.y) && (new_y >= 0));
+
+	return test;
+
+}
+
+std::deque<pos> next_moves(pos initial_place, vector<pos> possible_moves, pos limit, scenario<bool>& environment){
+	pos aux;
+	std::deque<pos> next_steps;
+
+	for (pos move : possible_moves){
+		aux.x = initial_place.x + move.x;
+		aux.y = initial_place.y + move.y;
+
+		if (valid_place(aux.x, aux.y, limit) && environment[aux.x][aux.y]){
+			next_steps.push_back(aux);
+		}
+	}
+
+	return next_steps;
+}
+
+void create_new_environment(std::deque<std::deque<pos>>& moves, unordered_set<unordered_set<pos>>& new_environments){
+	// Cartesian Product: http://stackoverflow.com/a/5279601
 }
