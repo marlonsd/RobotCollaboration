@@ -3,3 +3,5 @@
 *.out
 *.pdf
 reader
+cart_prod*
+prod
