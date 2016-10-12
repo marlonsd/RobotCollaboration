@@ -17,7 +17,7 @@ main.o: main.cpp include/environment.h include/moviment.h
 environment.o: cpp/environment.cpp include/environment.h
 	g++ -std=c++11 -c cpp/environment.cpp
 
-moviment.o: cpp/moviment.cpp include/moviment.h include/environment.h
+moviment.o: cpp/moviment.cpp include/environment.h include/moviment.h
 	g++ -std=c++11 -c cpp/moviment.cpp
 
 clean:

@@ -1,5 +1,7 @@
 #include "include/environment.h"
 #include "include/moviment.h"
+#include <string>
+#include <vector>
 
 vector<pos> load_moviment(int min, int max);
 
@@ -14,10 +16,11 @@ int main(int argc, char* argv[]){
 	std::deque<pos> goals;
 	std::deque<pos> obstacles;
 
-	std::deque<std::deque<pos>> all_next_moves;
+	// std::deque<std::deque<pos>> all_next_moves;
+	deque<positions> all_next_moves;
 
-	unordered_set<pos, pos_hash> new_environment;
-	unordered_set<unordered_set<pos, pos_hash>, group_pos_hash> new_environments;
+	unordered_set<pos> new_environment;
+	deque<positions> new_environments;
 
 	string filename = argv[1];
 
@@ -48,11 +51,12 @@ int main(int argc, char* argv[]){
 	cout << "Map limit: " << environment_size.x << " " << environment_size.y << endl;
 
 	cout << "Objects:" << endl;
-	for (auto e : robots){
+	for (pos e : robots){
 		cout << "\tRobots: ";
 		cout << "(" << e.x << "," << e.y << ") ";
 		cout << endl << "\t\tMoves: ";
-		std::deque<pos> aux_move = next_moves(e, moviment, environment_size, environment);
+		// std::deque<pos> aux_move = next_moves(e, moviment, environment_size, environment);
+		positions aux_move = next_moves(e, moviment, environment_size, environment);
 		for (auto i : aux_move){
 			cout << "(" << i.x << "," << i.y << ") ";
 		}
@@ -72,6 +76,23 @@ int main(int argc, char* argv[]){
 		cout << "(" << e.x << "," << e.y << ") ";
 	}
 	cout << endl;
+
+	cout << endl;
+
+	cout << "New scenarios"<< endl;
+
+	create_new_environment(all_next_moves, new_environments);
+
+	int count_possibilities = 0;
+	for (positions s : new_environments){
+		cout << "\tScenario " << count_possibilities << endl;
+
+		for (pos e : s){
+			cout << "\t\t(" << e.x << " " << e.y << ")" << endl;
+		}
+
+		count_possibilities++;
+	}
 
 	return 0;
 }

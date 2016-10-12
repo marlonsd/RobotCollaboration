@@ -8,45 +8,46 @@
 #include <string>
 #include <cstring>
 #include <deque>
+#include <functional>
 #include <unordered_set>
 #include <unordered_map> // C++11 Hash Table
 
-using namespace std;
+struct pos{
+	int x;
+	int y;
+
+	bool operator==(const pos &v) const {
+		return (x == v.x &&
+				y == v.y	);
+	}
+};
+
+namespace std {
+	// Hasing: http://stackoverflow.com/a/17017281
+	template <>	struct hash<pos>{
+		std::size_t operator()(const pos& k) const {
+			using std::size_t;
+			using std::hash;
+			using std::string;
+
+			// Compute individual hash values for first,
+			// second and third and combine them using XOR
+			// and bit shifting:
+
+			return ((hash<int>()(k.x)
+					^ (hash<int>()(k.y) << 1)) >> 1);
+		}
+	};
+
+}
 
 // typedef std::deque<std::deque<string>> scenario;
+
+typedef std::deque<pos> positions;
 
 template <typename T>
 using scenario = std::deque<std::deque<T>>;
 
-struct pos{
-	int x;	// Line
-	int y;	// Column
-};
-
-// http://stackoverflow.com/a/15161034
-// Hash of a pair
-struct pos_hash {
-    inline std::size_t operator()(const pos& v) const {
-        return v.x*31+v.y;
-    }
-};
-
-struct group_pos_hash {
-    inline std::size_t operator()(const unordered_set<pos, pos_hash>& v) const {
-    	stringstream ss;
-
-		for (auto e : v){
-			ss << e.x << "," << e.y << ";";
-		}
-
-        return hash<string>()(ss.str());
-
-
-    }
-};
-
-scenario<bool> create_environment(string filename, std::deque<pos>& robots, std::deque<pos>& goals, std::deque<pos>& obstacles);
-
-void create_new_environment(std::deque<std::deque<pos>>& moves, unordered_set<unordered_set<pos>>& new_environments);
+scenario<bool> create_environment(std::string filename, std::deque<pos>& robots, std::deque<pos>& goals, std::deque<pos>& obstacles);
 
 #endif

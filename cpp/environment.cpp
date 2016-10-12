@@ -1,5 +1,7 @@
 #include "../include/environment.h"
 
+using namespace std;
+
 // deque	push_back is O(1)
 // vector 	push_back is amortized O(1)
 
@@ -75,6 +77,6 @@ scenario<bool> create_environment(string filename, std::deque<pos>& robots, std:
 	return matrix;
 }
 
-void create_new_environment(std::deque<std::deque<pos>>& moves, unordered_set<unordered_set<pos>>& new_environments){
+// void create_new_environment(std::deque<std::deque<pos>>& moves, unordered_set<unordered_set<pos>>& new_environments){
 	// Cartesian Product: http://stackoverflow.com/a/5279601
-}
+// }
