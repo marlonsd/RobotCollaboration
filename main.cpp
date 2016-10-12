@@ -1,4 +1,5 @@
-#include "environment.h"
+#include "include/environment.h"
+#include "include/moviment.h"
 
 vector<pos> load_moviment(int min, int max);
 
@@ -16,7 +17,7 @@ int main(int argc, char* argv[]){
 	std::deque<std::deque<pos>> all_next_moves;
 
 	unordered_set<pos, pos_hash> new_environment;
-	// unordered_set<unordered_set<pos, pos_hash>> new_environments;
+	unordered_set<unordered_set<pos, pos_hash>, group_pos_hash> new_environments;
 
 	string filename = argv[1];
 

@@ -8,14 +8,17 @@
 # endif
 # FLAGS += -lresolv -lpthread
 
-reader: main.o environment.o
-	g++ -std=c++11 main.o environment.o -o reader
+reader: main.o environment.o moviment.o
+	g++ -std=c++11 main.o environment.o moviment.o -o reader
 
-main.o: main.cpp environment.h
+main.o: main.cpp include/environment.h include/moviment.h
 	g++ -std=c++11 -c main.cpp
 
-environment.o: environment.cpp environment.h
-	g++ -std=c++11 -c environment.cpp
+environment.o: cpp/environment.cpp include/environment.h
+	g++ -std=c++11 -c cpp/environment.cpp
+
+moviment.o: cpp/moviment.cpp include/moviment.h include/environment.h
+	g++ -std=c++11 -c cpp/moviment.cpp
 
 clean:
 	rm *.o reader

@@ -31,12 +31,21 @@ struct pos_hash {
     }
 };
 
+struct group_pos_hash {
+    inline std::size_t operator()(const unordered_set<pos, pos_hash>& v) const {
+    	stringstream ss;
+
+		for (auto e : v){
+			ss << e.x << "," << e.y << ";";
+		}
+
+        return hash<string>()(ss.str());
+
+
+    }
+};
+
 scenario<bool> create_environment(string filename, std::deque<pos>& robots, std::deque<pos>& goals, std::deque<pos>& obstacles);
-
-bool valid_place(int x, int i, int y, int j, pos limit);
-bool valid_place(int new_x, int new_y, pos limit);
-
-std::deque<pos> next_moves(pos initial_place, vector<pos> possible_moves, pos limit, scenario<bool>& environment);
 
 void create_new_environment(std::deque<std::deque<pos>>& moves, unordered_set<unordered_set<pos>>& new_environments);
 
