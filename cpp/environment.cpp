@@ -7,11 +7,11 @@ using namespace std;
 
 // Read file and convert it to a matrix,
 // And list goals, obstacles and robots
-scenario<bool> create_environment(string filename, std::deque<pos>& robots, std::deque<pos>& goals, std::deque<pos>& obstacles){
+scenario<char> create_environment(string filename, std::deque<pos>& robots, std::deque<pos>& goals){
 	string s, token;
 	ifstream environment;
 
-	scenario<bool> matrix;
+	scenario<char> matrix;
 	pos position;
 
 	std::deque<pos> temp_robots, temp_goals;
@@ -28,18 +28,17 @@ scenario<bool> create_environment(string filename, std::deque<pos>& robots, std:
 		while(getline(environment, s)){
 			stringstream line(s);
 
-			std::deque<bool> aux_line;
+			std::deque<char> aux_line;
 
 			// Process the entire line
 			while(line >> token) {
 				switch(token[0]){
 					case 'g':
 						temp_goals.push_back(position);
-						aux_line.push_back(1);
+						aux_line.push_back(2);
 						goals_map[(token[1] - '0') - 1] = temp_goals.size()-1;
 						break;
 					case 'o':
-						obstacles.push_back(position);
 						aux_line.push_back(0);
 						break;
 					case 'x':
@@ -77,6 +76,6 @@ scenario<bool> create_environment(string filename, std::deque<pos>& robots, std:
 	return matrix;
 }
 
-// void create_new_environment(std::deque<std::deque<pos>>& moves, unordered_set<unordered_set<pos>>& new_environments){
-	// Cartesian Product: http://stackoverflow.com/a/5279601
-// }
+bool check_goal(){
+	return false;
+}

@@ -22,6 +22,8 @@ struct pos{
 	}
 };
 
+typedef std::deque<pos> positions;
+
 namespace std {
 	// Hasing: http://stackoverflow.com/a/17017281
 	template <>	struct hash<pos>{
@@ -39,15 +41,35 @@ namespace std {
 		}
 	};
 
+	template <>	struct hash<positions>{
+		std::size_t operator()(const positions& k) const {
+			using std::size_t;
+			using std::hash;
+			using std::string;
+
+			std::stringstream ss;
+
+			for (pos e : k){
+				ss << e.x << "," << e.y << ";";
+			}
+
+			return hash<std::string>()(ss.str());
+		}
+	};
+
+}
+
+inline bool operator==(const positions& v, const positions& x) {
+	// return (std::hash<positions>(v) == std::hash<positions>(x) );
 }
 
 // typedef std::deque<std::deque<string>> scenario;
 
-typedef std::deque<pos> positions;
-
 template <typename T>
 using scenario = std::deque<std::deque<T>>;
 
-scenario<bool> create_environment(std::string filename, std::deque<pos>& robots, std::deque<pos>& goals, std::deque<pos>& obstacles);
+scenario<char> create_environment(std::string filename, std::deque<pos>& robots, std::deque<pos>& goals);
+
+bool check_goal();
 
 #endif
