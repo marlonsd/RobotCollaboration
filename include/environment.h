@@ -43,10 +43,6 @@ namespace std {
 
 	template <>	struct hash<positions>{
 		std::size_t operator()(const positions& k) const {
-			using std::size_t;
-			using std::hash;
-			using std::string;
-
 			std::stringstream ss;
 
 			for (pos e : k){
@@ -59,17 +55,16 @@ namespace std {
 
 }
 
-inline bool operator==(const positions& v, const positions& x) {
-	// return (std::hash<positions>(v) == std::hash<positions>(x) );
-}
-
-// typedef std::deque<std::deque<string>> scenario;
+struct node{
+	positions p;
+	int f;
+};
 
 template <typename T>
 using scenario = std::deque<std::deque<T>>;
 
 scenario<char> create_environment(std::string filename, std::deque<pos>& robots, std::deque<pos>& goals);
 
-bool check_goal();
+bool check_goal(positions& robots, scenario<char>& environment);
 
 #endif

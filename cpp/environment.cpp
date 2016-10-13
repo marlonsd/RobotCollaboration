@@ -76,6 +76,13 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots, std:
 	return matrix;
 }
 
-bool check_goal(){
-	return false;
+bool check_goal(positions& robots, scenario<char>& environment){
+
+	for (pos robot : robots){
+		if (int(environment[robot.x][robot.y]) != 2){
+			return false;
+		}
+	}
+
+	return true;
 }

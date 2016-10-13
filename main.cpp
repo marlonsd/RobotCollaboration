@@ -20,10 +20,13 @@ int main(int argc, char* argv[]){
 
 	// std::deque<std::deque<pos>> all_next_moves;
 	deque<positions> all_next_moves;
+
+	deque<positions> new_environments;
 	unordered_set<positions> possible_new_environments;
 
-	unordered_set<pos> new_environment;
-	deque<positions> new_environments;
+	node aux_node;
+
+	deque<node> execution_queue;
 
 	string filename = argv[1];
 
@@ -38,10 +41,15 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
-	possible_new_environments.insert(robots);
-
 	environment_size.x = environment.size();
 	environment_size.y = environment[0].size();
+
+	possible_new_environments.insert(robots);
+
+	aux_node.p = robots;
+	aux_node.f = -1;
+
+	execution_queue.push_back(aux_node);
 
 	cout << endl << "Environment:" << endl;
 
@@ -63,20 +71,12 @@ int main(int argc, char* argv[]){
 	}
 	cout << endl;
 
-	// cout << "\tObstacles: ";
-	// for (auto e : obstacles){
-	// 	cout << "(" << e.x << "," << e.y << ") ";
-	// }
-	// cout << endl;
-
-	cout << endl;
-
-	positions test = *possible_new_environments.begin();
-
 	int count_possibilities = 0;
-	// for (positions s : possible_new_environments){
-	while(!possible_new_environments.empty() && !goal_found){
-		positions robots = *possible_new_environments.begin();
+
+	int it = 0;
+
+	while((it < execution_queue.size()) && !goal_found){
+		robots = execution_queue[it].p;
 
 		cout << "\tScenario " << count_possibilities << endl;
 
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]){
 		}
 
 		// Checks if goal was reached
-		if (check_goal()){
+		if (check_goal(robots, environment)){
 			goal_found = true;
 			continue; // Stops loop
 		}
@@ -94,7 +94,6 @@ int main(int argc, char* argv[]){
 			cout << "\tRobots: ";
 			cout << "(" << e.x << "," << e.y << ") ";
 			cout << endl << "\t\tMoves: ";
-			// std::deque<pos> aux_move = next_moves(e, moviment, environment_size, environment);
 			positions aux_move = next_moves(e, moviment, environment_size, environment);
 			for (auto i : aux_move){
 				cout << "(" << i.x << "," << i.y << ") ";
@@ -108,14 +107,44 @@ int main(int argc, char* argv[]){
 
 		all_next_moves.clear();
 
-
 		for (positions e : new_environments){
-			possible_new_environments.insert(e);
+			std::pair<unordered_set<positions>::iterator,bool> insertion_test = possible_new_environments.insert(e);
+			if (insertion_test.second){
+				aux_node.p = e;
+				aux_node.f = it;
+				execution_queue.push_back(aux_node);
+			}
 		}
 
 		count_possibilities++;
 
-		possible_new_environments.erase(possible_new_environments.begin());
+		// execution_queue.pop_front(); // Removes from queue when finishes expanding node
+		it++;
+	}
+
+	if (it == execution_queue.size()){
+		cout << "No solution found." << endl;
+	} else {
+		string path[robots.size()];
+
+		for (int i = 0; i < robots.size(); i++){
+			path[i] = "";
+		}
+
+		while (it >= 0){
+			robots = execution_queue[it].p;
+			for (int i = 0; i < robots.size(); i++){
+				pos r = robots[i];
+
+				string word = " (" + to_string(r.x) + "," + to_string(r.y) + ")";
+
+				path[i] = word + path[i];
+			}
+		}
+
+		for (int i = 0; i < robots.size(); i++){
+			cout << "x" << i << ":" << path[i] << endl;
+		}
 	}
 
 	return 0;
