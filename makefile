@@ -8,17 +8,22 @@
 # endif
 # FLAGS += -lresolv -lpthread
 
-reader: main.o environment.o moviment.o
-	g++ -std=c++11 main.o environment.o moviment.o -o reader
+all: tp1-problema1 tp1-problema2
 
-main.o: main.cpp include/environment.h include/moviment.h
-	g++ -std=c++11 -c main.cpp
+tp1-problema1: main_tp1.o environment.o moviment.o
+	g++ -std=c++11 -O3 main_tp1.o environment.o moviment.o -o tp1-problema1
+
+tp1-problema2: main_tp2.o environment.o moviment.o
+	g++ -std=c++11 -O3 main_tp2.o environment.o moviment.o -o tp1-problema2
+
+main_tp1.o: main_tp1.cpp include/environment.h include/moviment.h
+	g++ -std=c++11 -O3 -c main_tp1.cpp
 
 environment.o: cpp/environment.cpp include/environment.h
-	g++ -std=c++11 -c cpp/environment.cpp
+	g++ -std=c++11 -O3 -c cpp/environment.cpp
 
 moviment.o: cpp/moviment.cpp include/environment.h include/moviment.h
-	g++ -std=c++11 -c cpp/moviment.cpp
+	g++ -std=c++11 -O3 -c cpp/moviment.cpp
 
 clean:
-	rm *.o reader
+	rm *.o tp1-problema1 tp1-problema2

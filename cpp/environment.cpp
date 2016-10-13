@@ -86,3 +86,7 @@ bool check_goal(positions& robots, scenario<char>& environment){
 
 	return true;
 }
+
+bool valid_scenario(positions& old_places, positions& new_places){
+	return true;
+}

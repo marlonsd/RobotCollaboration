@@ -16,9 +16,7 @@ int main(int argc, char* argv[]){
 	scenario<char> environment;
 	positions robots;
 	positions goals;
-	// std::deque<pos> obstacles;
 
-	// std::deque<std::deque<pos>> all_next_moves;
 	deque<positions> all_next_moves;
 
 	deque<positions> new_environments;
@@ -110,25 +108,26 @@ int main(int argc, char* argv[]){
 		for (positions e : new_environments){
 			std::pair<unordered_set<positions>::iterator,bool> insertion_test = possible_new_environments.insert(e);
 			if (insertion_test.second){
-				aux_node.p = e;
-				aux_node.f = it;
-				execution_queue.push_back(aux_node);
+				if (valid_scenario(robots, e)){
+					aux_node.p = e;
+					aux_node.f = it;
+					execution_queue.push_back(aux_node);
+				}
 			}
 		}
 
 		count_possibilities++;
 
-		// execution_queue.pop_front(); // Removes from queue when finishes expanding node
 		it++;
 	}
 
 	if (it == execution_queue.size()){
 		cout << "No solution found." << endl;
 	} else {
-		string path[robots.size()];
+		vector<string> path;
 
 		for (int i = 0; i < robots.size(); i++){
-			path[i] = "";
+			path.push_back("");
 		}
 
 		while (it >= 0){

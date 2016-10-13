@@ -15,4 +15,7 @@ void create_new_environment(deque<positions>& moves, deque<positions>& new_envir
 
 void cartesian_product(deque<positions>& rvvi, positions&  rvi, deque<positions>::const_iterator me, deque<positions>::const_iterator end);
 
+// Test if new_places respects problem 2 definition
+bool valid_scenario(positions& old_places, positions& new_places);
+
 #endif

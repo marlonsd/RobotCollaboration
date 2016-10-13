@@ -61,7 +61,7 @@ struct node{
 };
 
 template <typename T>
-using scenario = std::deque<std::deque<T>>;
+using scenario = std::deque<std::deque<T> >;
 
 scenario<char> create_environment(std::string filename, std::deque<pos>& robots, std::deque<pos>& goals);
 
