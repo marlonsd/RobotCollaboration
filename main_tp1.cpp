@@ -78,11 +78,11 @@ int main(int argc, char* argv[]){
 	while((it < execution_queue.size()) && !goal_found){
 		robots = execution_queue[it].p;
 
-		// cout << "Scenario " << count_possibilities << '\n';
+		cout << "Scenario " << count_possibilities << '\n';
 
-		// for (pos e : robots){
-			// cout << "\t\t(" << e.x << " " << e.y << ")" << endl;
-		// }
+		for (pos e : robots){
+			cout << "\t\t(" << e.x << " " << e.y << ")" << endl;
+		}
 
 		// Checks if goal was reached
 		if (check_goal(robots, environment)){
@@ -142,6 +142,8 @@ int main(int argc, char* argv[]){
 
 				path[i] = word + path[i];
 			}
+
+			it = execution_queue[it].f;
 		}
 
 		for (int i = 0; i < robots.size(); i++){
