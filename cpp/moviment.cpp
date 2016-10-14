@@ -55,14 +55,29 @@ positions next_moves(pos initial_place, vector<pos> possible_moves, pos limit, s
 	return next_steps;
 }
 
-void create_new_environment(scenario<pos>& moves, deque<positions>& new_environments){
+void create_new_environment(deque<positions>& new_environments, positions& robots, vector<pos> moviment, pos limit, scenario<char>& environment){
 	positions moves_temp;
 	scenario<pos> aux;
-	cartesian_product(aux, moves_temp, moves.begin(), moves.end());
+	scenario<pos> moves;
 
-	for (positions m : aux){
-		new_environments.push_back(m);
+	for (pos e : robots){
+			// cout << "\tRobots: ";
+			// cout << "(" << e.x << "," << e.y << ") ";
+			// cout << endl << "\t\tMoves: ";
+			positions aux_move = next_moves(e, moviment, limit, environment);
+			// for (auto i : aux_move){
+				// cout << "(" << i.x << "," << i.y << ") ";
+			// }
+			moves.push_back(aux_move);
+			// cout << endl;
 	}
+
+
+	cartesian_product(new_environments, moves_temp, moves.begin(), moves.end());
+
+	// for (positions m : aux){
+		// new_environments.push_back(m);
+	// }
 }
 
 // http://stackoverflow.com/a/5279601

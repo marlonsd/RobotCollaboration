@@ -16,7 +16,9 @@ int main(int argc, char* argv[]){
 	scenario<char> environment;
 	positions robots;
 	positions goals;
+	// std::deque<pos> obstacles;
 
+	// std::deque<std::deque<pos>> all_next_moves;
 	deque<positions> all_next_moves;
 
 	deque<positions> new_environments;
@@ -76,11 +78,11 @@ int main(int argc, char* argv[]){
 	while((it < execution_queue.size()) && !goal_found){
 		robots = execution_queue[it].p;
 
-		cout << "\tScenario " << count_possibilities << endl;
+		cout << "Scenario " << count_possibilities << '\n';
 
-		for (pos e : robots){
-			cout << "\t\t(" << e.x << " " << e.y << ")" << endl;
-		}
+		// for (pos e : robots){
+			// cout << "\t\t(" << e.x << " " << e.y << ")" << endl;
+		// }
 
 		// Checks if goal was reached
 		if (check_goal(robots, environment)){
@@ -88,20 +90,20 @@ int main(int argc, char* argv[]){
 			continue; // Stops loop
 		}
 
-		for (pos e : robots){
-			cout << "\tRobots: ";
-			cout << "(" << e.x << "," << e.y << ") ";
-			cout << endl << "\t\tMoves: ";
-			positions aux_move = next_moves(e, moviment, environment_size, environment);
-			for (auto i : aux_move){
-				cout << "(" << i.x << "," << i.y << ") ";
-			}
-			all_next_moves.push_back(aux_move);
-			cout << endl;
-		}
-		cout << endl;
+		// for (pos e : robots){
+			// cout << "\tRobots: ";
+			// cout << "(" << e.x << "," << e.y << ") ";
+			// cout << endl << "\t\tMoves: ";
+			// positions aux_move = next_moves(e, moviment, environment_size, environment);
+			// for (auto i : aux_move){
+				// cout << "(" << i.x << "," << i.y << ") ";
+			// }
+			// all_next_moves.push_back(aux_move);
+			// cout << endl;
+		// }
+		// cout << endl;
 
-		create_new_environment(all_next_moves, new_environments);
+		create_new_environment(new_environments, robots, moviment, environment_size, environment);
 
 		all_next_moves.clear();
 
@@ -116,8 +118,11 @@ int main(int argc, char* argv[]){
 			}
 		}
 
+		new_environments.clear();
+
 		count_possibilities++;
 
+		// execution_queue.pop_front(); // Removes from queue when finishes expanding node
 		it++;
 	}
 
