@@ -20,6 +20,26 @@ struct pos{
 		return (x == v.x &&
 				y == v.y	);
 	}
+
+	bool operator!=(const pos &v) const {
+		return (!(x == v.x &&
+						y == v.y));
+	}
+
+	pos operator-(const pos &v){
+		pos aux;
+
+		aux.x = x-v.x;
+		aux.y = y-v.y;
+
+		return aux;
+	}
+
+	std::ostream& operator<<(std::ostream& os){
+		os << "x: " << x << "y :" << y;
+
+		return os;
+	}
 };
 
 typedef std::deque<pos> positions;
@@ -64,6 +84,11 @@ template <typename T>
 using scenario = std::deque<std::deque<T> >;
 
 scenario<char> create_environment(std::string filename, std::deque<pos>& robots, std::deque<pos>& goals);
+
+bool valid_place(int x, int i, int y, int j, pos limit);
+bool valid_place(int new_x, int new_y, pos limit);
+bool valid_place(pos new_pos, pos limit);
+bool valid_scenario(positions& places);
 
 bool check_goal(positions& robots, scenario<char>& environment);
 

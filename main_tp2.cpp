@@ -45,6 +45,26 @@ int main(int argc, char* argv[]){
 
 	execution_queue.push_back(aux_node);
 
+	// pos a, b, c, d;
+
+	// a.x = 0;
+	// a.y = 0;
+
+	// b.x = 1;
+	// b.y = -1;
+
+	// c.x = 8;
+	// c.y = 3;
+
+	// d.x = 7;
+	// d.y = 4;
+
+	// cout << (a-b).x << " " << (a-b).y << endl;
+	// cout << (d-c).x << " " << (d-c).y << endl;
+	// cout << int((b-a) != (d-c)) << endl;
+
+	// exit(0);
+
 	// cout << endl << "Environment:" << endl;
 
 	// for (auto line : environment){
@@ -71,6 +91,11 @@ int main(int argc, char* argv[]){
 
 	while((it < execution_queue.size()) && !goal_found){
 		robots = execution_queue[it].p;
+
+		for (pos e : robots){
+			cout << e.x << " " << e.y << endl;
+		}
+		cout << endl;
 
 		// Checks if goal was reached
 		if (check_goal(robots, environment)){

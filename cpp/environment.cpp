@@ -36,7 +36,7 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots, std:
 					case 'g':
 						temp_goals.push_back(position);
 						aux_line.push_back(2);
-						goals_map[(token[1] - '0') - 1] = temp_goals.size()-1;
+						goals_map[(token[1] - '0')] = temp_goals.size()-1;
 						break;
 					case 'o':
 						aux_line.push_back(0);
@@ -44,7 +44,7 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots, std:
 					case 'x':
 						temp_robots.push_back(position);
 						aux_line.push_back(1);
-						robots_map[(token[1] - '0') - 1] = temp_robots.size()-1;
+						robots_map[(token[1] - '0')] = temp_robots.size()-1;
 						break;
 					default:
 						aux_line.push_back(1);
@@ -76,6 +76,54 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots, std:
 	return matrix;
 }
 
+bool valid_place(int x, int i, int y, int j, pos limit){
+	bool test;
+	int new_x, new_y;
+
+	new_x = x+i;
+	new_y = y+j;
+
+	test = (new_x < limit.x) && (new_x >= 0);
+	test = test && ((new_y < limit.y) && (new_y >= 0));
+
+	// x+i <= limit.x && >= 0
+	// y+j <= limit.y && >= 0
+
+	return test;
+
+}
+
+bool valid_place(int new_x, int new_y, pos limit){
+	bool test;
+
+	test = (new_x < limit.x) && (new_x >= 0);
+	test = test && ((new_y < limit.y) && (new_y >= 0));
+
+	return test;
+
+}
+
+bool valid_place(pos new_pos, pos limit){
+	bool test;
+
+	test = (new_pos.x < limit.x) && (new_pos.x >= 0);
+	test = test && ((new_pos.y < limit.y) && (new_pos.y >= 0));
+
+	return test;
+
+}
+
+bool valid_scenario(positions& places){
+	unordered_set<pos> set;
+
+	for (pos e : places){
+		set.insert(e);
+	}
+
+	return set.size() == places.size();
+
+}
+
 bool check_goal(positions& robots, scenario<char>& environment){
 
 	for (pos robot : robots){
@@ -89,40 +137,65 @@ bool check_goal(positions& robots, scenario<char>& environment){
 
 bool valid_scenario(positions& old_places, positions& new_places, scenario<char> environment){
 	int i;
-	pos p;
 
-	scenario<char> new_environment = environment;
+	pos limit;
+
 	unordered_map<pos, int> position_to_number;
 
 	vector<pair<pair<int, int>, pair<int, int> > > connect; // [(<robot1 connect to robot2>, <where the connection happens>)]
 
 	vector<pair<int, int> > moviment = {	pair<int, int>(1,0),
 											pair<int, int>(-1,0),
+											// pair<int, int>(0,0),
 											pair<int, int>(0,1),
 											pair<int, int>(0,-1)	};
+
+	limit.x = environment.size();
+	limit.y = environment[0].size();
+
 
 	for (i = 0; i < old_places.size(); i++){
 		pos e = old_places[i];
 		environment[e.x][e.y] = 3;
 		position_to_number[e] = i;
-
-		e = new_places[i];
-		new_environment[e.x][e.y] = 3;
 	}
 
+	// cout << "Stage analysis" << endl;
+
+	// Detecting number of connections and where they occur
 	for (i = 0; i < old_places.size(); i++){
 		pos e = old_places[i];
 
 		for (pair<int, int> m : moviment){
+			pos p = e;
 
-			p.x = old_places[i].x + m.first;
-			p.y = old_places[i].y + m.second;
+			p.x += m.first;
+			p.y += m.second;
 
-			if (int(environment[p.x][p.y]) == 3){
-				connect.push_back(pair<pair<int, int>, pair<int, int> >(pair<int, int>(i, position_to_number[p]), m));
+			if (valid_place(p, limit) && (environment[p.x][p.y]) == 3){
+				pair<int, int> connection;
+				connection.first = i;
+				connection.second = position_to_number[p];
+
+				// cout << "("<< old_places[connection.first].x << " " << old_places[connection.first].y << endl
+				// 	 << old_places[connection.second].x << " " << old_places[connection.second].y << endl << endl
+				// 	 << new_places[connection.first].x << " " << new_places[connection.first].y << endl
+				// 	 << new_places[connection.second].x << " " << new_places[connection.second].y << ")" << endl << endl;
+
+				if ((new_places[connection.first] - old_places[connection.first]) != (new_places[connection.second] - old_places[connection.second])){
+					// cout << new_places[connection.first].x << " " << new_places[connection.first].y << endl
+						 // << old_places[connection.first].x << " " << old_places[connection.first].y << endl << endl
+						 // << new_places[connection.second].x << " " << new_places[connection.second].y << endl
+						 // << old_places[connection.second].x << " " << old_places[connection.second].y << endl;
+					// cout << "return false" << endl << endl;
+					return false;
+				}
+
+				connect.push_back(pair<pair<int, int>, pair<int, int> >(connection, m));
 			}
 		}
 	}
 
+	// cout << "return true" << endl << endl;
 	return true;
 }
