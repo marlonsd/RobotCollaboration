@@ -67,4 +67,7 @@ scenario<char> create_environment(std::string filename, std::deque<pos>& robots,
 
 bool check_goal(positions& robots, scenario<char>& environment);
 
+// Test if new_places respects problem 2 definition
+bool valid_scenario(positions& old_places, positions& new_places, scenario<char> environment);
+
 #endif

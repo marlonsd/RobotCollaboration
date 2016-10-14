@@ -1,7 +1,5 @@
 #include "include/environment.h"
 #include "include/moviment.h"
-#include <string>
-#include <vector>
 
 vector<pos> load_moviment(int min, int max);
 
@@ -85,7 +83,7 @@ int main(int argc, char* argv[]){
 		for (positions e : new_environments){
 			std::pair<unordered_set<positions>::iterator,bool> insertion_test = possible_new_environments.insert(e);
 			if (insertion_test.second){
-				if (valid_scenario(robots, e)){
+				if (valid_scenario(robots, e, environment)){
 					aux_node.p = e;
 					aux_node.f = it;
 					execution_queue.push_back(aux_node);

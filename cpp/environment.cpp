@@ -87,6 +87,42 @@ bool check_goal(positions& robots, scenario<char>& environment){
 	return true;
 }
 
-bool valid_scenario(positions& old_places, positions& new_places){
+bool valid_scenario(positions& old_places, positions& new_places, scenario<char> environment){
+	int i;
+	pos p;
+
+	scenario<char> new_environment = environment;
+	unordered_map<pos, int> position_to_number;
+
+	vector<pair<pair<int, int>, pair<int, int> > > connect; // [(<robot1 connect to robot2>, <where the connection happens>)]
+
+	vector<pair<int, int> > moviment = {	pair<int, int>(1,0),
+											pair<int, int>(-1,0),
+											pair<int, int>(0,1),
+											pair<int, int>(0,-1)	};
+
+	for (i = 0; i < old_places.size(); i++){
+		pos e = old_places[i];
+		environment[e.x][e.y] = 3;
+		position_to_number[e] = i;
+
+		e = new_places[i];
+		new_environment[e.x][e.y] = 3;
+	}
+
+	for (i = 0; i < old_places.size(); i++){
+		pos e = old_places[i];
+
+		for (pair<int, int> m : moviment){
+
+			p.x = old_places[i].x + m.first;
+			p.y = old_places[i].y + m.second;
+
+			if (int(environment[p.x][p.y]) == 3){
+				connect.push_back(pair<pair<int, int>, pair<int, int> >(pair<int, int>(i, position_to_number[p]), m));
+			}
+		}
+	}
+
 	return true;
 }
