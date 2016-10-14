@@ -80,9 +80,9 @@ int main(int argc, char* argv[]){
 
 		cout << "Scenario " << count_possibilities << '\n';
 
-		// for (pos e : robots){
-			// cout << "\t\t(" << e.x << " " << e.y << ")" << endl;
-		// }
+		for (pos e : robots){
+			cout << "\t\t(" << e.x << " " << e.y << ")" << endl;
+		}
 
 		// Checks if goal was reached
 		if (check_goal(robots, environment)){

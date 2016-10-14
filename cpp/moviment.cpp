@@ -61,15 +61,15 @@ void create_new_environment(deque<positions>& new_environments, positions& robot
 	scenario<pos> moves;
 
 	for (pos e : robots){
-			// cout << "\tRobots: ";
-			// cout << "(" << e.x << "," << e.y << ") ";
-			// cout << endl << "\t\tMoves: ";
+			cout << "\tRobots: ";
+			cout << "(" << e.x << "," << e.y << ") ";
+			cout << endl << "\t\tMoves: ";
 			positions aux_move = next_moves(e, moviment, limit, environment);
-			// for (auto i : aux_move){
-				// cout << "(" << i.x << "," << i.y << ") ";
-			// }
+			for (auto i : aux_move){
+				cout << "(" << i.x << "," << i.y << ") ";
+			}
 			moves.push_back(aux_move);
-			// cout << endl;
+			cout << endl;
 	}
 
 
