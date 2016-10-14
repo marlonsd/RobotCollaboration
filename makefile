@@ -19,6 +19,9 @@ tp1-problema2: main_tp2.o environment.o moviment.o
 main_tp1.o: main_tp1.cpp include/environment.h include/moviment.h
 	g++ -std=c++11 -O3 -c main_tp1.cpp
 
+main_tp2.o: main_tp2.cpp include/environment.h include/moviment.h
+	g++ -std=c++11 -O3 -c main_tp2.cpp
+
 environment.o: cpp/environment.cpp include/environment.h
 	g++ -std=c++11 -O3 -c cpp/environment.cpp
 
