@@ -1,7 +1,7 @@
 #include "include/environment.h"
 #include "include/moviment.h"
 
-vector<pos> load_moviment(int min, int max);
+vector<pos> load_moviment();
 
 int main(int argc, char* argv[]){
 	if (argc < 2){
@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
 
 	deque<positions> new_environments;
 	// unordered_set<node> possible_new_environments;
-	unordered_set<node> to_visit;
+	unordered_set<positions> to_visit;
 
 	node aux_node;
 
@@ -27,7 +27,7 @@ int main(int argc, char* argv[]){
 
 	pos environment_size;
 
-	vector<pos> moviment = load_moviment(-1,1);
+	vector<pos> moviment = load_moviment();
 
 	environment = create_environment(filename,robots);
 
@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
 	aux_node.p = robots;
 	aux_node.f = -1;
 
-	to_visit.insert(aux_node);
+	to_visit.insert(robots);
 
 	execution_queue.push_back(aux_node);
 
@@ -63,13 +63,12 @@ int main(int argc, char* argv[]){
 
 		for (positions e : new_environments){
 			if (valid_scenario(robots, e, environment)){
-				aux_node.p = e;
-				aux_node.f = it;
-
-				std::pair<unordered_set<node>::iterator,bool> insertion_test = to_visit.insert(aux_node);
+				std::pair<unordered_set<positions>::iterator,bool> insertion_test = to_visit.insert(e);
 
 				// Test if scenario is in the list to be visited
 				if (insertion_test.second){
+					aux_node.p = e;
+					aux_node.f = it;
 					execution_queue.push_back(aux_node);
 				}
 			}
@@ -110,17 +109,35 @@ int main(int argc, char* argv[]){
 	return 0;
 }
 
-vector<pos> load_moviment(int min, int max){
+vector<pos> load_moviment(){
 	pos aux;
 	vector<pos> moviment;
 
-	for (int i = min; i <= max; i++){
-		aux.x = i;
-		for (int j = min; j <= max; j++){
-			aux.y = j;
-			moviment.push_back(aux);
-		}
+	// Manually seleceted so it is possible to rearrange its order
+	vector<std::pair<int,int> > possible_moves = {	std::pair<int,int>(0,0),
+													std::pair<int,int>(0,1),
+													std::pair<int,int>(0,-1),
+													std::pair<int,int>(1,0),
+													std::pair<int,int>(1,1),
+													std::pair<int,int>(1,-1),
+													std::pair<int,int>(-1,0),
+													std::pair<int,int>(-1,1),
+													std::pair<int,int>(-1,-1)	};
+
+	for (std::pair<int,int> pace : possible_moves){
+		aux.x = pace.first;
+		aux.y = pace.second;
+
+		moviment.push_back(aux);
 	}
+
+	// for (int i = min; i <= max; i++){
+	// 	aux.x = i;
+	// 	for (int j = min; j <= max; j++){
+	// 		aux.y = j;
+	// 		moviment.push_back(aux);
+	// 	}
+	// }
 
 	return moviment;
 }

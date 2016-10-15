@@ -1,7 +1,7 @@
 #include "include/environment.h"
 #include "include/moviment.h"
 
-vector<pos> load_moviment(int min, int max);
+vector<pos> load_moviment();
 
 int main(int argc, char* argv[]){
 	if (argc < 2){
@@ -27,7 +27,7 @@ int main(int argc, char* argv[]){
 
 	pos environment_size;
 
-	vector<pos> moviment = load_moviment(-1,1);
+	vector<pos> moviment = load_moviment();
 
 	environment = create_environment(filename,robots);
 
@@ -106,17 +106,35 @@ int main(int argc, char* argv[]){
 	return 0;
 }
 
-vector<pos> load_moviment(int min, int max){
+vector<pos> load_moviment(){
 	pos aux;
 	vector<pos> moviment;
 
-	for (int i = min; i <= max; i++){
-		aux.x = i;
-		for (int j = min; j <= max; j++){
-			aux.y = j;
-			moviment.push_back(aux);
-		}
+	// Manually seleceted so it is possible to rearrange its order
+	vector<std::pair<int,int> > possible_moves = {	std::pair<int,int>(0,0),
+													std::pair<int,int>(0,1),
+													std::pair<int,int>(0,-1),
+													std::pair<int,int>(1,0),
+													std::pair<int,int>(1,1),
+													std::pair<int,int>(1,-1),
+													std::pair<int,int>(-1,0),
+													std::pair<int,int>(-1,1),
+													std::pair<int,int>(-1,-1)	};
+
+	for (std::pair<int,int> pace : possible_moves){
+		aux.x = pace.first;
+		aux.y = pace.second;
+
+		moviment.push_back(aux);
 	}
+
+	// for (int i = min; i <= max; i++){
+	// 	aux.x = i;
+	// 	for (int j = min; j <= max; j++){
+	// 		aux.y = j;
+	// 		moviment.push_back(aux);
+	// 	}
+	// }
 
 	return moviment;
 }
