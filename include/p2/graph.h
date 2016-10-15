@@ -1,5 +1,5 @@
-#ifndef ENVIRONMENT_BRIDGE_H
-#define ENVIRONMENT_BRIDGE_H
+#ifndef GRAPH_H
+#define GRAPH_H
 
 #include "../p1/environment.h"
 #include "../p1/moviment.h"
