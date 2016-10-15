@@ -1,5 +1,5 @@
-#include "include/environment.h"
-#include "include/moviment.h"
+#include "include/p1/environment.h"
+#include "include/p1/moviment.h"
 
 vector<pos> load_moviment();
 

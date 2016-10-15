@@ -1,4 +1,4 @@
-#include "../include/moviment.h"
+#include "../../include/p1/moviment.h"
 
 positions next_moves(pos initial_place, vector<pos> possible_moves, pos limit, scenario<char>& environment){
 	pos aux;

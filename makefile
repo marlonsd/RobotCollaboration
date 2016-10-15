@@ -16,17 +16,17 @@ tp1-problema1: main_tp1.o environment.o moviment.o
 tp1-problema2: main_tp2.o environment.o moviment.o
 	g++ -std=c++11 -O3 main_tp2.o environment.o moviment.o -o tp1-problema2
 
-main_tp1.o: main_tp1.cpp include/environment.h include/moviment.h
+main_tp1.o: main_tp1.cpp include/p1/environment.h include/p1/moviment.h
 	g++ -std=c++11 -O3 -c main_tp1.cpp
 
-main_tp2.o: main_tp2.cpp include/environment.h include/moviment.h
+main_tp2.o: main_tp2.cpp include/p1/environment.h include/p1/moviment.h
 	g++ -std=c++11 -O3 -c main_tp2.cpp
 
-environment.o: cpp/environment.cpp include/environment.h
-	g++ -std=c++11 -O3 -c cpp/environment.cpp
+environment.o: cpp/p1/environment.cpp include/p1/environment.h
+	g++ -std=c++11 -O3 -c cpp/p1/environment.cpp
 
-moviment.o: cpp/moviment.cpp include/environment.h include/moviment.h
-	g++ -std=c++11 -O3 -c cpp/moviment.cpp
+moviment.o: cpp/p1/moviment.cpp include/p1/environment.h include/p1/moviment.h
+	g++ -std=c++11 -O3 -c cpp/p1/moviment.cpp
 
 clean:
 	rm *.o tp1-problema1 tp1-problema2
