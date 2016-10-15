@@ -16,7 +16,8 @@ int main(int argc, char* argv[]){
 	// positions goals;
 
 	deque<positions> new_environments;
-	unordered_set<positions> possible_new_environments;
+	// unordered_set<node> possible_new_environments;
+	unordered_set<node> to_visit;
 
 	node aux_node;
 
@@ -38,54 +39,14 @@ int main(int argc, char* argv[]){
 	environment_size.x = environment.size();
 	environment_size.y = environment[0].size();
 
-	possible_new_environments.insert(robots);
+	// possible_new_environments.insert(robots);
 
 	aux_node.p = robots;
 	aux_node.f = -1;
 
+	to_visit.insert(aux_node);
+
 	execution_queue.push_back(aux_node);
-
-	// pos a, b, c, d;
-
-	// a.x = 0;
-	// a.y = 0;
-
-	// b.x = 1;
-	// b.y = -1;
-
-	// c.x = 8;
-	// c.y = 3;
-
-	// d.x = 7;
-	// d.y = 4;
-
-	// cout << (a-b).x << " " << (a-b).y << endl;
-	// cout << (d-c).x << " " << (d-c).y << endl;
-	// cout << int((b-a) != (d-c)) << endl;
-
-	// exit(0);
-
-	// cout << endl << "Environment:" << endl;
-
-	// for (auto line : environment){
-	// 	for (auto element : line){
-	// 		cout << int(element) << "\t";
-	// 	}
-	// 	cout << endl;
-	// }
-
-	// cout << endl;
-
-	// cout << "Map limit: " << environment_size.x << " " << environment_size.y << endl;
-
-	// cout << "Objects:" << endl;
-	// cout << "\tGoals: ";
-	// for (auto e : goals){
-	// 	cout << "(" << e.x << "," << e.y << ") ";
-	// }
-	// cout << endl;
-
-	int count_possibilities = 0;
 
 	int it = 0;
 
@@ -101,15 +62,14 @@ int main(int argc, char* argv[]){
 		create_new_environment(new_environments, robots, moviment, environment_size, environment);
 
 		for (positions e : new_environments){
-			
-			// Test if the scenario is possible
 			if (valid_scenario(robots, e, environment)){
-				std::pair<unordered_set<positions>::iterator,bool> insertion_test = possible_new_environments.insert(e);
+				aux_node.p = e;
+				aux_node.f = it;
+
+				std::pair<unordered_set<node>::iterator,bool> insertion_test = to_visit.insert(aux_node);
 
 				// Test if scenario is in the list to be visited
 				if (insertion_test.second){
-					aux_node.p = e;
-					aux_node.f = it;
 					execution_queue.push_back(aux_node);
 				}
 			}
@@ -117,12 +77,10 @@ int main(int argc, char* argv[]){
 
 		new_environments.clear();
 
-		count_possibilities++;
-
 		it++;
 	}
 
-	if (it == execution_queue.size()){
+	if (it >= execution_queue.size()){
 		cout << "No solution found." << endl;
 	} else {
 		vector<string> path;

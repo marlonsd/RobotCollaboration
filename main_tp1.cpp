@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
 
 	deque<positions> new_environments;
 	unordered_set<node> possible_new_environments;
-	unordered_set<positions> visited;
+	unordered_set<positions> to_visit;
 
 	node aux_node;
 
@@ -39,12 +39,10 @@ int main(int argc, char* argv[]){
 	environment_size.x = environment.size();
 	environment_size.y = environment[0].size();
 
-	// possible_new_environments.insert(robots);
+	// aux_node.p = robots;
+	// aux_node.f = -1;
 
-	aux_node.p = robots;
-	aux_node.f = -1;
-
-	// possible_new_environments.insert(aux_node);
+	to_visit.insert(robots);
 
 	execution_queue.push_back(aux_node);
 
@@ -53,19 +51,8 @@ int main(int argc, char* argv[]){
 	while((it < execution_queue.size()) && !goal_found){
 		robots = execution_queue[it].p;
 
-		std::pair<unordered_set<positions>::iterator,bool> insertion_test = visited.insert(robots);
-
-		cout << "Iteration " << it << endl;
-
-		// Tests if scenario have been visited before
-		if (!insertion_test.second){
-			it++;
-			continue;
-		}
-
 		// Checks if goal was reached
 		if (check_goal(robots, environment)){
-			cout << "found" << endl;
 			goal_found = true;
 			continue; // Stops loop
 		}
@@ -73,13 +60,13 @@ int main(int argc, char* argv[]){
 		create_new_environment(new_environments, robots, moviment, environment_size, environment);
 
 		for (positions e : new_environments){
-			unordered_set<positions>::iterator visited_test = visited.find(e);
+			std::pair<unordered_set<positions>::iterator,bool> insertion_test = to_visit.insert(e);
 
 			// Test if scenario is in the list to be visited
-			if (visited_test == visited.end()){
+			if (insertion_test.second){
 				aux_node.p = e;
 				aux_node.f = it;
-				
+
 				execution_queue.push_back(aux_node);
 			}
 		}
