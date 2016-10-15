@@ -20,6 +20,8 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots){
 	position.x = 0;
 	position.y = 0;
 
+	string number;
+
 	environment.open(filename, ios::in);
 
 	if (environment.is_open()){
@@ -32,6 +34,7 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots){
 
 			// Process the entire line
 			while(line >> token) {
+				number = "";
 				switch(token[0]){
 					case 'g':
 						// temp_goals.push_back(position);
@@ -44,7 +47,12 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots){
 					case 'x':
 						temp_robots.push_back(position);
 						aux_line.push_back(1);
-						robots_map[(token[1] - '0')] = temp_robots.size()-1;
+
+						for (int i= 1; i < token.size(); i++){
+							number += token[1];
+						}
+
+						robots_map[atoi(number.c_str())] = temp_robots.size()-1;
 						break;
 					default:
 						aux_line.push_back(1);

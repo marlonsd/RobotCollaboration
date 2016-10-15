@@ -21,9 +21,19 @@ struct pos{
 				y == v.y	);
 	}
 
+	bool operator==(const std::pair<int,int> &v) const {
+		return (x == v.first &&
+				y == v.second	);
+	}
+
 	bool operator!=(const pos &v) const {
 		return (!(x == v.x &&
 						y == v.y));
+	}
+
+	bool operator!=(const std::pair<int,int> &v) const {
+		return (!(x == v.first &&
+						y == v.second));
 	}
 
 	pos operator-(const pos &v){

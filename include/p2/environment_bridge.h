@@ -1,19 +1,13 @@
 #ifndef ENVIRONMENT_BRIDGE_H
 #define ENVIRONMENT_BRIDGE_H
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <string>
-#include <cstring>
-#include <deque>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map> // C++11 Hash Table
-
 #include "../p1/environment.h"
+#include "../p1/moviment.h"
 
-scenario<bool> create_environment(std::string filename);
+typedef std::vector<std::vector<int>> adjacency_matrix;
+
+adjacency_matrix create_graph(std::string filename);
+
+vector<pos> load_moviment(int min, int max);
 
 #endif

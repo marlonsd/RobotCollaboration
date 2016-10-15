@@ -36,15 +36,15 @@ moviment.o: cpp/p1/moviment.cpp include/p1/environment.h include/p1/moviment.h
 
 #### Problem 3
 
-tp1-problema3: main_tp3.o environment.o environment_bridge.o
-	g++ -std=c++11 -O3 main_tp3.o environment.o environment_bridge.o -o tp1-problema3
+tp1-problema3: main_tp3.o environment.o moviment.o environment_bridge.o
+	g++ -std=c++11 -O3 main_tp3.o environment.o moviment.o environment_bridge.o -o tp1-problema3
 
-main_tp3.o: main_tp3.cpp include/p2/environment_bridge.h include/p1/environment.h
+main_tp3.o: main_tp3.cpp include/p2/environment_bridge.h include/p1/environment.h include/p1/moviment.h
 	g++ -std=c++11 -O3 -c main_tp3.cpp
 
 # Includes
 
-environment_bridge.o: cpp/p2/environment_bridge.cpp include/p2/environment_bridge.h include/p1/environment.h
+environment_bridge.o: cpp/p2/environment_bridge.cpp include/p2/environment_bridge.h include/p1/environment.h include/p1/moviment.h
 	g++ -std=c++11 -O3 -c cpp/p2/environment_bridge.cpp
 
 clean:

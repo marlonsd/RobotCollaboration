@@ -8,5 +8,9 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
+	string filename = argv[1];
+
+	adjacency_matrix graph = create_graph(filename);
+
 	return 0;
 }
