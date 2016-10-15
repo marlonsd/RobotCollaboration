@@ -13,10 +13,11 @@ int main(int argc, char* argv[]){
 
 	scenario<char> environment;
 	positions robots;
-	positions goals;
+	// positions goals;
 
 	deque<positions> new_environments;
-	unordered_set<positions> possible_new_environments;
+	unordered_set<node> possible_new_environments;
+	unordered_set<positions> visited;
 
 	node aux_node;
 
@@ -28,7 +29,7 @@ int main(int argc, char* argv[]){
 
 	vector<pos> moviment = load_moviment(-1,1);
 
-	environment = create_environment(filename,robots,goals);
+	environment = create_environment(filename,robots);
 
 	if (environment.size() < 1){
 		cout << "It was not possible to load \"" << filename << "\"" << endl;
@@ -38,42 +39,33 @@ int main(int argc, char* argv[]){
 	environment_size.x = environment.size();
 	environment_size.y = environment[0].size();
 
-	possible_new_environments.insert(robots);
+	// possible_new_environments.insert(robots);
 
 	aux_node.p = robots;
 	aux_node.f = -1;
 
+	// possible_new_environments.insert(aux_node);
+
 	execution_queue.push_back(aux_node);
-
-	// cout << endl << "Environment:" << endl;
-
-	// for (auto line : environment){
-	// 	for (auto element : line){
-	// 		cout << int(element) << "\t";
-	// 	}
-	// 	cout << endl;
-	// }
-
-	// cout << endl;
-
-	// cout << "Map limit: " << environment_size.x << " " << environment_size.y << endl;
-
-	// cout << "Objects:" << endl;
-	// cout << "\tGoals: ";
-	// for (auto e : goals){
-	// 	cout << "(" << e.x << "," << e.y << ") ";
-	// }
-	// cout << endl;
-
-	int count_possibilities = 0;
 
 	int it = 0;
 
 	while((it < execution_queue.size()) && !goal_found){
 		robots = execution_queue[it].p;
 
+		std::pair<unordered_set<positions>::iterator,bool> insertion_test = visited.insert(robots);
+
+		cout << "Iteration " << it << endl;
+
+		// Tests if scenario have been visited before
+		if (!insertion_test.second){
+			it++;
+			continue;
+		}
+
 		// Checks if goal was reached
 		if (check_goal(robots, environment)){
+			cout << "found" << endl;
 			goal_found = true;
 			continue; // Stops loop
 		}
@@ -81,24 +73,23 @@ int main(int argc, char* argv[]){
 		create_new_environment(new_environments, robots, moviment, environment_size, environment);
 
 		for (positions e : new_environments){
-			std::pair<unordered_set<positions>::iterator,bool> insertion_test = possible_new_environments.insert(e);
-			if (insertion_test.second){
+			unordered_set<positions>::iterator visited_test = visited.find(e);
+
+			// Test if scenario is in the list to be visited
+			if (visited_test == visited.end()){
 				aux_node.p = e;
 				aux_node.f = it;
+				
 				execution_queue.push_back(aux_node);
 			}
 		}
 
 		new_environments.clear();
 
-		count_possibilities++;
-
 		it++;
 	}
 
-	// cout << "Total of iterations: " << count_possibilities << endl;
-
-	if (it == execution_queue.size()){
+	if (it >= execution_queue.size()){
 		cout << "No solution found." << endl;
 	} else {
 		vector<string> path;
@@ -112,7 +103,7 @@ int main(int argc, char* argv[]){
 			for (int i = 0; i < robots.size(); i++){
 				pos r = robots[i];
 
-				string word = " (" + to_string(r.x+1) + "," + to_string(r.y+1) + ")";
+				string word = " (" + to_string(r.x) + "," + to_string(r.y) + ")";
 
 				path[i] = word + path[i];
 			}
@@ -121,7 +112,7 @@ int main(int argc, char* argv[]){
 		}
 
 		for (int i = 0; i < robots.size(); i++){
-			cout << "x" << i+1 << ":\t[" << path[i];
+			cout << "x" << i << ":\t[" << path[i];
 		}
 	}
 

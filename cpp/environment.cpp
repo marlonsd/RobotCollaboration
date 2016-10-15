@@ -7,15 +7,15 @@ using namespace std;
 
 // Read file and convert it to a matrix,
 // And list goals, obstacles and robots
-scenario<char> create_environment(string filename, std::deque<pos>& robots, std::deque<pos>& goals){
+scenario<char> create_environment(string filename, std::deque<pos>& robots){
 	string s, token;
 	ifstream environment;
 
 	scenario<char> matrix;
 	pos position;
 
-	std::deque<pos> temp_robots, temp_goals;
-	std::unordered_map<int,int> robots_map, goals_map;
+	std::deque<pos> temp_robots;//, temp_goals;
+	std::unordered_map<int,int> robots_map;//, goals_map;
 
 	position.x = 0;
 	position.y = 0;
@@ -34,9 +34,9 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots, std:
 			while(line >> token) {
 				switch(token[0]){
 					case 'g':
-						temp_goals.push_back(position);
+						// temp_goals.push_back(position);
 						aux_line.push_back(2);
-						goals_map[(token[1] - '0')] = temp_goals.size()-1;
+						// goals_map[(token[1] - '0')] = temp_goals.size()-1;
 						break;
 					case 'o':
 						aux_line.push_back(0);
@@ -63,10 +63,10 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots, std:
 
 	environment.close();
 
-	// Reordering goals
-	for (int i = 0; i < temp_goals.size(); i++){
-		goals.push_back(temp_goals[goals_map[i]]);
-	}
+	// // Reordering goals
+	// for (int i = 0; i < temp_goals.size(); i++){
+	// 	goals.push_back(temp_goals[goals_map[i]]);
+	// }
 
 	// Reordering robots
 	for (int i = 0; i < temp_robots.size(); i++){
@@ -113,7 +113,7 @@ bool valid_place(pos new_pos, pos limit){
 
 }
 
-bool valid_scenario(positions& places){
+bool valid_scenario(const positions& places){
 	unordered_set<pos> set;
 
 	for (pos e : places){
@@ -136,17 +136,17 @@ bool check_goal(positions& robots, scenario<char>& environment){
 }
 
 bool valid_scenario(positions& old_places, positions& new_places, scenario<char> environment){
-	int i;
+	int i;//, number_old_connections = 0, number_new_connections = 0;
 
 	pos limit;
 
 	unordered_map<pos, int> position_to_number;
 
-	vector<pair<pair<int, int>, pair<int, int> > > connect; // [(<robot1 connect to robot2>, <where the connection happens>)]
+	// vector<pair<pair<int, int>, pair<int, int> > > connect; // [(<robot1 connect to robot2>, <where the connection happens>)]
 
 	vector<pair<int, int> > moviment = {	pair<int, int>(1,0),
 											pair<int, int>(-1,0),
-											// pair<int, int>(0,0),
+											pair<int, int>(0,0),
 											pair<int, int>(0,1),
 											pair<int, int>(0,-1)	};
 
@@ -160,8 +160,6 @@ bool valid_scenario(positions& old_places, positions& new_places, scenario<char>
 		position_to_number[e] = i;
 	}
 
-	// cout << "Stage analysis" << endl;
-
 	// Detecting number of connections and where they occur
 	for (i = 0; i < old_places.size(); i++){
 		pos e = old_places[i];
@@ -172,30 +170,43 @@ bool valid_scenario(positions& old_places, positions& new_places, scenario<char>
 			p.x += m.first;
 			p.y += m.second;
 
-			if (valid_place(p, limit) && (environment[p.x][p.y]) == 3){
+			if (valid_place(p, limit) && (int(environment[p.x][p.y]) == 3)){
 				pair<int, int> connection;
 				connection.first = i;
 				connection.second = position_to_number[p];
 
-				// cout << "("<< old_places[connection.first].x << " " << old_places[connection.first].y << endl
-				// 	 << old_places[connection.second].x << " " << old_places[connection.second].y << endl << endl
-				// 	 << new_places[connection.first].x << " " << new_places[connection.first].y << endl
-				// 	 << new_places[connection.second].x << " " << new_places[connection.second].y << ")" << endl << endl;
-
 				if ((new_places[connection.first] - old_places[connection.first]) != (new_places[connection.second] - old_places[connection.second])){
-					// cout << new_places[connection.first].x << " " << new_places[connection.first].y << endl
-						 // << old_places[connection.first].x << " " << old_places[connection.first].y << endl << endl
-						 // << new_places[connection.second].x << " " << new_places[connection.second].y << endl
-						 // << old_places[connection.second].x << " " << old_places[connection.second].y << endl;
-					// cout << "return false" << endl << endl;
 					return false;
 				}
 
-				connect.push_back(pair<pair<int, int>, pair<int, int> >(connection, m));
+				// connect.push_back(pair<pair<int, int>, pair<int, int> >(connection, m));
+				// number_old_connections++;
 			}
 		}
 	}
 
-	// cout << "return true" << endl << endl;
 	return true;
+
+	// if (!number_old_connections){
+	// 	return true;
+	// }
+
+	// // Detecting number of connections in the new_places
+	// for (i = 0; i < new_places.size(); i++){
+	// 	pos e = new_places[i];
+
+	// 	for (pair<int, int> m : moviment){
+	// 		pos p = e;
+
+	// 		p.x += m.first;
+	// 		p.y += m.second;
+
+	// 		if (valid_place(p, limit) && (int(environment[p.x][p.y]) == 3)){
+	// 			// connect.push_back(pair<pair<int, int>, pair<int, int> >(connection, m));
+	// 			number_new_connections++;
+	// 		}
+	// 	}
+	// }
+
+	// return number_new_connections == number_old_connections;
 }

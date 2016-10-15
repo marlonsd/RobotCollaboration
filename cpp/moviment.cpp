@@ -5,11 +5,10 @@ positions next_moves(pos initial_place, vector<pos> possible_moves, pos limit, s
 	positions next_steps;
 
 	for (pos move : possible_moves){
-		aux.x = initial_place.x + move.x;
-		aux.y = initial_place.y + move.y;
+		aux = initial_place + move;
 
 		// Test if new position respects environment size and if the new position is on an obstacle
-		if (valid_place(aux.x, aux.y, limit) && environment[aux.x][aux.y]){
+		if (valid_place(aux.x, aux.y, limit) && (int(environment[aux.x][aux.y]) != 0)){
 			next_steps.push_back(aux);
 		}
 	}

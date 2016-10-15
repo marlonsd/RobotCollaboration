@@ -13,7 +13,7 @@ int main(int argc, char* argv[]){
 
 	scenario<char> environment;
 	positions robots;
-	positions goals;
+	// positions goals;
 
 	deque<positions> new_environments;
 	unordered_set<positions> possible_new_environments;
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 
 	vector<pos> moviment = load_moviment(-1,1);
 
-	environment = create_environment(filename,robots,goals);
+	environment = create_environment(filename,robots);
 
 	if (environment.size() < 1){
 		cout << "It was not possible to load \"" << filename << "\"" << endl;
@@ -92,11 +92,6 @@ int main(int argc, char* argv[]){
 	while((it < execution_queue.size()) && !goal_found){
 		robots = execution_queue[it].p;
 
-		for (pos e : robots){
-			cout << e.x << " " << e.y << endl;
-		}
-		cout << endl;
-
 		// Checks if goal was reached
 		if (check_goal(robots, environment)){
 			goal_found = true;
@@ -106,9 +101,13 @@ int main(int argc, char* argv[]){
 		create_new_environment(new_environments, robots, moviment, environment_size, environment);
 
 		for (positions e : new_environments){
-			std::pair<unordered_set<positions>::iterator,bool> insertion_test = possible_new_environments.insert(e);
-			if (insertion_test.second){
-				if (valid_scenario(robots, e, environment)){
+			
+			// Test if the scenario is possible
+			if (valid_scenario(robots, e, environment)){
+				std::pair<unordered_set<positions>::iterator,bool> insertion_test = possible_new_environments.insert(e);
+
+				// Test if scenario is in the list to be visited
+				if (insertion_test.second){
 					aux_node.p = e;
 					aux_node.f = it;
 					execution_queue.push_back(aux_node);
@@ -122,8 +121,6 @@ int main(int argc, char* argv[]){
 
 		it++;
 	}
-
-	// cout << "Total of iterations: " << count_possibilities << endl;
 
 	if (it == execution_queue.size()){
 		cout << "No solution found." << endl;
@@ -139,7 +136,7 @@ int main(int argc, char* argv[]){
 			for (int i = 0; i < robots.size(); i++){
 				pos r = robots[i];
 
-				string word = " (" + to_string(r.x+1) + "," + to_string(r.y+1) + ")";
+				string word = " (" + to_string(r.x) + "," + to_string(r.y) + ")";
 
 				path[i] = word + path[i];
 			}
@@ -148,7 +145,7 @@ int main(int argc, char* argv[]){
 		}
 
 		for (int i = 0; i < robots.size(); i++){
-			cout << "x" << i+1 << ":\t[" << path[i];
+			cout << "x" << i << ":\t[" << path[i];
 		}
 	}
 
