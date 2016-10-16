@@ -12,5 +12,7 @@ int main(int argc, char* argv[]){
 
 	adjacency_matrix graph = create_graph(filename);
 
+	cout << ford_fulkerson(graph, 0, graph.size()-1) << endl;
+
 	return 0;
 }

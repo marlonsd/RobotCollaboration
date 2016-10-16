@@ -152,3 +152,67 @@ vector<pos> load_moviment(int min, int max){
 
 	return moviment;
 }
+
+
+// Returns true if there is a path from source 's' to sink 't' in residual graph.
+bool bfs(adjacency_matrix& residual_graph, int s, int t, vector<int>& parent){
+	std::vector<bool> visited(residual_graph.size(),0);
+
+	deque<int> q;
+	q.push_back(s);
+	visited[s] = true;
+	parent[s] = -1;
+ 
+	while (!q.empty()){
+		int u = q.front();
+		q.pop_front();
+ 
+		for (int v = 0; v < residual_graph.size(); v++){
+			if (!visited[v] && residual_graph[u][v] > 0){
+				q.push_back(v);
+				parent[v] = u;
+				visited[v] = true;
+			}
+		}
+	}
+ 
+	// If sink was reached in BFS
+	return (visited[t] == true);
+}
+
+
+// Returns tne maximum flow from s to t in the given graph
+int ford_fulkerson(adjacency_matrix& graph, int s, int t){
+	int u, v;
+ 
+	adjacency_matrix residual_graph = graph;
+
+	vector<int> parent(residual_graph.size(), -1);  // To store path filled by BFS
+ 
+	int max_flow = 0;
+	
+	while (bfs(residual_graph, s, t, parent)){
+		int path_flow = INT_MAX;
+
+		for (v = t; v != s; v = parent[v]){
+			u = parent[v];
+			if (residual_graph[u][v] < path_flow){
+				path_flow = residual_graph[u][v];
+			}
+		}
+ 
+		// update residual capacities of the edges and reverse edges
+		// along the path
+		for (v = t; v != s; v=parent[v]){
+			u = parent[v];
+			residual_graph[u][v] -= path_flow;
+			residual_graph[v][u] += path_flow;
+		}
+ 
+		// Add path flow to overall flow
+		max_flow += path_flow;
+	}
+ 
+	// Return the overall flow
+	return max_flow;
+}
