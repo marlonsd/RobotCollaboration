@@ -8,11 +8,17 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
-	string filename = argv[1];
+	string filename = argv[1], output_filename = "output.txt";
 
 	adjacency_matrix graph = create_graph(filename);
 
-	cout << ford_fulkerson(graph, 0, graph.size()-1) << endl;
+	ofstream output;
+
+	output.open(output_filename);
+
+	output << ford_fulkerson(graph, 0, graph.size()-1) << endl;
+
+	output.close();
 
 	return 0;
 }

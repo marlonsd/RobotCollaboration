@@ -177,19 +177,19 @@ bool bfs(adjacency_matrix& residual_graph, int s, int t, vector<int>& parent){
 	}
  
 	// If sink was reached in BFS
-	return (visited[t] == true);
+	return visited[t];
 }
 
 
 // Returns tne maximum flow from s to t in the given graph
-int ford_fulkerson(adjacency_matrix& graph, int s, int t){
+float ford_fulkerson(adjacency_matrix& graph, int s, int t){
 	int u, v;
  
 	adjacency_matrix residual_graph = graph;
 
 	vector<int> parent(residual_graph.size(), -1);  // To store path filled by BFS
  
-	int max_flow = 0;
+	float max_flow = 0;
 	
 	while (bfs(residual_graph, s, t, parent)){
 		int path_flow = INT_MAX;
@@ -209,10 +209,8 @@ int ford_fulkerson(adjacency_matrix& graph, int s, int t){
 			residual_graph[v][u] += path_flow;
 		}
  
-		// Add path flow to overall flow
-		max_flow += path_flow;
+		max_flow += float(path_flow);
 	}
  
-	// Return the overall flow
 	return max_flow;
 }

@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
 
 	deque<node> execution_queue;
 
-	string filename = argv[1];
+	string filename = argv[1], output_filename = "output.txt";
 
 	pos environment_size;
 
@@ -79,8 +79,12 @@ int main(int argc, char* argv[]){
 		it++;
 	}
 
+	ofstream output;
+
+	output.open(output_filename);
+
 	if (it >= execution_queue.size()){
-		cout << "No solution found." << endl;
+		output << "No solution found." << endl;
 	} else {
 		vector<string> path;
 
@@ -102,9 +106,11 @@ int main(int argc, char* argv[]){
 		}
 
 		for (int i = 0; i < robots.size(); i++){
-			cout << "x" << i << ":\t[" << path[i];
+			output << "x" << i << ":\t[" << path[i];
 		}
 	}
+
+	output.close();
 
 	return 0;
 }

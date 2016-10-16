@@ -49,7 +49,7 @@ scenario<char> create_environment(string filename, std::deque<pos>& robots){
 						aux_line.push_back(1);
 
 						for (int i= 1; i < token.size(); i++){
-							number += token[1];
+							number += token[i];
 						}
 
 						robots_map[atoi(number.c_str())] = temp_robots.size()-1;

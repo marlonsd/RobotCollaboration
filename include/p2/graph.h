@@ -15,6 +15,6 @@ vector<pos> load_moviment(int min, int max);
 
 bool bfs(adjacency_matrix& residual_graph, int s, int t, vector<int>& parent);
 
-int ford_fulkerson(adjacency_matrix& graph, int s, int t);
+float ford_fulkerson(adjacency_matrix& graph, int s, int t);
 
 #endif
